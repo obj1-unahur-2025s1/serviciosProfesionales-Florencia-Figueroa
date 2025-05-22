@@ -1,9 +1,109 @@
-import example.pepita
+import profecionales.*
+import universidades_y_provincias.*
+import empresa.*
 
-describe "group of tests for pepita" {
 
-  test "pepita has initial energy" {
-    assert.equals(100, pepita.energy())
-  }
+describe "group of test for Etapa 1 - Profesionales y empresas" {
 
+    //Puedo definir los objetos sin necesidad de meterlos en cada test
+
+    //Universidades disponibles
+    const sanMartin  = new Universidad(provincia = buenosAires, honorarios = 3500)
+    const rosario    = new Universidad(provincia = santaFe, honorarios = 2800)
+    const corriente  = new Universidad(provincia = corrientes, honorarios = 4200)
+    const hurlingham = new Universidad(provincia = buenosAires, honorarios = 8800)
+
+    //Profecionales disponibles
+    const juana   = new ProfesionalesVinculados(universidad = rosario)
+    const melina  = new ProfesionalesAsociados (universidad = corriente)
+    const rocio   = new ProfesionalesLibres    (universidad = hurlingham, trabajoEnProvincias = #{santaFe, cordoba, buenosAires}, honorarios = 5000)
+    const luciana = new ProfesionalesLibres    (universidad = rosario, trabajoEnProvincias = #{santaFe, entreRios}, honorarios = 3200)
+
+    //Empresa disponible
+    const mercadoLibre = new Empresa(empleados = #{}, honorarios = 3500)
+
+    //Se puede poner en un method para definir informacion que se usa en varios test dentro de un describe
+    //Empresa que contrata profecionales
+    method initialize(){
+        mercadoLibre.contratarEmpleado(juana)
+        mercadoLibre.contratarEmpleado(melina)
+        mercadoLibre.contratarEmpleado(rocio)
+        mercadoLibre.contratarEmpleado(luciana)
+    }
+
+    test "La empresa tiene 2 profecionales que estudiaron en rosario, 1 en hurlingham y ninguno en san martin" {
+        assert.equals(2, mercadoLibre.empleadosQueEstudiaronEn(rosario))
+        assert.equals(1, mercadoLibre.empleadosQueEstudiaronEn(hurlingham))
+        assert.equals(0, mercadoLibre.empleadosQueEstudiaronEn(sanMartin))
+    }
+
+    test "La empresa tiene a rocio como unica empleada cara" {
+        assert.that(mercadoLibre.empleadosCaros().contains(rocio))
+    }
+
+    test "Las universidades formadoras" {
+        assert.equals(#{rosario, corriente, hurlingham}, mercadoLibre.universidadesFormadoras())
+    }
+
+    test "La empresa tiene a juana como empleado barato" {
+        assert.equals(juana, mercadoLibre.empleadoMasBarato())
+    }
+
+    test "La empresa es de gente acotada" {
+      assert.that(mercadoLibre.esGenteAcotada())
+    }
+
+    test "Lucia trabaja en mas provincias y la empresa ya no es de gente acotada" {
+        luciana.puedeTrabajarEn(corrientes)
+        luciana.puedeTrabajarEn(misiones)
+        
+        assert.notThat(mercadoLibre.esGenteAcotada())
+    }
 }
+
+
+/*
+describe "group of tests for profecionales y empresas -pruebas" {
+
+    test "prueba 1" {
+        //Primero debo guardar en const/ var los objetos con los que quiero trabajar y definirlos
+        const unahur = new Universidad(provincia = "Buenos Aires", honorarios = 2000)
+        const flor = new ProfecionalesVinculados(universidad = unahur)
+
+        //assert.equals(#{"Buenos Aires"}, flor.trabajoEnProvincias())      --> otra forma de preguntar 
+        assert.that(flor.trabajoEnProvincias().contains("Buenos Aires")) // --> contains solo toma un elemento
+        assert.equals(2000, flor.honorarios())
+    }
+
+    test "prueba 2" {
+        const uner = new Universidad(provincia = "Entre Rios", honorarios = 0)
+        const contu = new ProfecionalesAsociados(universidad = uner)
+
+        assert.equals(#{"Entre Rios", "Santa Fe", "Corrientes"}, contu.trabajoEnProvincias()) 
+        assert.equals(3000, contu.honorarios())
+    }    
+
+    test "prueba 3" {
+        const uade = new Universidad(provincia = "Buenos Aires", honorarios = 0)
+        const tiff = new ProfecionalesLibres(universidad = uade, trabajoEnProvincias = #{"La Pampa"}, honorarios = 3800)
+        tiff.puedeTrabajarEn("Rio Negro")
+
+        assert.that(tiff.trabajoEnProvincias().contains("Rio Negro"))
+        assert.equals(3800, tiff.honorarios())
+        assert.equals(uade, tiff.universidad())
+    } 
+
+    test "prueba 4" {
+        //Guardo al profesional y su univerisdad
+        const unahur = new Universidad(provincia = "Buenos Aires", honorarios = 2000)
+        const flor = new ProfecionalesVinculados(universidad = unahur)
+
+        //Creo a la empresa en la cual trabaja e empleado
+        const mercadoLibre = new Empresa(empleados = #{}, honorarios = 1500)
+        mercadoLibre.contratarEmpleado(flor)
+
+        assert.equals(1, mercadoLibre.empleadosQueEstudiaronEn(unahur))
+        assert.that(mercadoLibre.empleadosCaros().contains(flor))
+    } 
+}
+*/
