@@ -1,6 +1,7 @@
-import profecionales.*
-import universidades_y_provincias.*
 import empresa.*
+import solicitantes.*
+import profesionales.*
+import universidades_y_provincias.*
 
 
 describe "group of test for Etapa 1 - Profesionales y empresas" {
@@ -23,7 +24,7 @@ describe "group of test for Etapa 1 - Profesionales y empresas" {
     const mercadoLibre = new Empresa(empleados = #{}, honorarios = 3500)
 
     //Se puede poner en un method para definir informacion que se usa en varios test dentro de un describe
-    //Empresa que contrata profecionales
+    //Empresa que contrata profesionales
     method initialize(){
         mercadoLibre.contratarEmpleado(juana)
         mercadoLibre.contratarEmpleado(melina)
@@ -31,7 +32,7 @@ describe "group of test for Etapa 1 - Profesionales y empresas" {
         mercadoLibre.contratarEmpleado(luciana)
     }
 
-    test "La empresa tiene 2 profecionales que estudiaron en rosario, 1 en hurlingham y ninguno en san martin" {
+    test "La empresa tiene 2 profesionales que estudiaron en rosario, 1 en hurlingham y ninguno en san martin" {
         assert.equals(2, mercadoLibre.empleadosQueEstudiaronEn(rosario))
         assert.equals(1, mercadoLibre.empleadosQueEstudiaronEn(hurlingham))
         assert.equals(0, mercadoLibre.empleadosQueEstudiaronEn(sanMartin))
@@ -56,8 +57,58 @@ describe "group of test for Etapa 1 - Profesionales y empresas" {
     test "Lucia trabaja en mas provincias y la empresa ya no es de gente acotada" {
         luciana.puedeTrabajarEn(corrientes)
         luciana.puedeTrabajarEn(misiones)
-        
+
         assert.notThat(mercadoLibre.esGenteAcotada())
+    }
+}
+
+
+describe "group of test for Etapa 2 - Solicitantes" {
+
+    //Universidades disponibles
+    const sanMartin  = new Universidad(provincia = buenosAires, honorarios = 3500)
+    const rosario    = new Universidad(provincia = santaFe, honorarios = 2800)
+    const corriente  = new Universidad(provincia = corrientes, honorarios = 4200)
+    const hurlingham = new Universidad(provincia = buenosAires, honorarios = 8800)
+
+    //Profecionales disponibles
+    const melina  = new ProfesionalesAsociados (universidad = corriente)
+    const rocio   = new ProfesionalesLibres    (universidad = hurlingham, trabajoEnProvincias = #{santaFe, cordoba, buenosAires}, honorarios = 5000)
+    const luciana = new ProfesionalesLibres    (universidad = rosario, trabajoEnProvincias = #{santaFe, entreRios}, honorarios = 3200)
+
+    //Empresa disponible
+    const mercadoLibre = new Empresa(empleados = #{}, honorarios = 3500)
+
+    //Empresa que contrata profesionales
+    method initialize(){
+        mercadoLibre.contratarEmpleado(melina)
+        mercadoLibre.contratarEmpleado(rocio)
+        mercadoLibre.contratarEmpleado(luciana)
+    }
+
+    //Personas disponibles
+    const adele = new Persona (provincia = buenosAires)
+
+    //Instituciones disponibles
+    const comunidad = new Institucion(universidades = #{rosario, sanMartin, hurlingham})
+
+    //Clubes disponibles
+    const bocaJuniors = new Club(provincias = #{buenosAires, corrientes, entreRios})
+
+    test "Una persona puede ser atendida por un profesional" {
+        assert.that(adele.puedeSerAtendido(rocio)) 
+    }
+
+    test "Una institucion puede ser atendida por un profesional" {
+        assert.that(bocaJuniors.puedeSerAtendido(rocio)) 
+    }
+
+    test "Un club puede ser atendida por un profesional" {
+        assert.that(comunidad.puedeSerAtendido(rocio)) 
+    }
+
+    test "La empresa puede satisfacer a un solicitante" {
+      assert.that(mercadoLibre.puedeSatisfacerA(adele))
     }
 }
 

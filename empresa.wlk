@@ -2,8 +2,8 @@
 
 //Empresas de servicios
 class Empresa{
-    const property empleados = #{}
-    const property honorarios
+    const empleados = #{}
+    const honorarios
 
     method contratarEmpleado(unEmpleado) {
         empleados.add(unEmpleado)}
@@ -23,4 +23,8 @@ class Empresa{
 
     method esGenteAcotada() =
         empleados.all({e => e.trabajoEnProvincias().size() <= 3})
+
+    // Etapa 2 - Solicitantes
+    method puedeSatisfacerA(unSolicitante) =
+        empleados.any({empleado => unSolicitante.puedeSerAtendido(empleado)})
 }
