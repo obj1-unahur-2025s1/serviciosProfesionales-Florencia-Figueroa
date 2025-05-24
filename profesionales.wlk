@@ -11,6 +11,12 @@ class ProfesionalesVinculados {
     method honorarios() = universidad.honorarios() 
     //Puedo meter un objeto de esta forma en un conjunto
     method trabajoEnProvincias() = #{universidad.provincia()}
+
+    // Etapa 3 - Cobros
+    //Envia un valor a un metodo de otro objeto
+    method cobrar(unImporte){
+        universidad.recibirDonaciones(unImporte / 2)
+    }      
 }
 
 class ProfesionalesAsociados {
@@ -18,14 +24,25 @@ class ProfesionalesAsociados {
 
     method honorarios() = 3000
     method trabajoEnProvincias() = #{entreRios, santaFe, corrientes}
+    method cobrar(unImporte){
+        asociacionDelLitoral.recibirDonaciones(unImporte)}
 }
 
 class ProfesionalesLibres {
     const property universidad
     const property trabajoEnProvincias = #{}
     const property honorarios
+    var totalRecaudado = 0
 
     method puedeTrabajarEn(unaProvincia){
         trabajoEnProvincias.add(unaProvincia)
+    }
+    method cobrar(unImporte){totalRecaudado += unImporte}
+    
+    method totalRecaudado() = totalRecaudado
+
+    method pasarDinero(unaPersona, unaCantidad){
+        totalRecaudado -= unaCantidad
+        unaPersona.cobrar(unaCantidad)
     }
 }

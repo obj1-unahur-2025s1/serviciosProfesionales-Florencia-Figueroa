@@ -4,8 +4,17 @@
 class Universidad {
     const property provincia    //Le agrego property para luego por consultarlo / modificarlo
     const property honorarios   //Le agrego property para luego por consultarlo / modificarlo 
+    var donaciones
+
+    method recibirDonaciones(unImporte){donaciones += unImporte}
+    method totalDonaciones() = donaciones
 }
 
+object asociacionDelLitoral {
+    var donaciones = 0
+    method recibirDonaciones(unImporte){donaciones += unImporte}
+    method totalDonaciones() = donaciones
+}
 
 //Provincias
 object buenosAires {}

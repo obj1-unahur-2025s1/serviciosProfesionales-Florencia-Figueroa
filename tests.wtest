@@ -4,15 +4,16 @@ import profesionales.*
 import universidades_y_provincias.*
 
 
-describe "group of test for Etapa 1 - Profesionales y empresas" {
+describe "group of test for Servivios profesionales" {
+
+    // Etapa 1 - Profesionales y empresas
 
     //Puedo definir los objetos sin necesidad de meterlos en cada test
-
     //Universidades disponibles
-    const sanMartin  = new Universidad(provincia = buenosAires, honorarios = 3500)
-    const rosario    = new Universidad(provincia = santaFe, honorarios = 2800)
-    const corriente  = new Universidad(provincia = corrientes, honorarios = 4200)
-    const hurlingham = new Universidad(provincia = buenosAires, honorarios = 8800)
+    const sanMartin  = new Universidad (provincia = buenosAires, honorarios = 3500, donaciones = 0)
+    const rosario    = new Universidad (provincia = santaFe,     honorarios = 2800, donaciones = 0)
+    const corriente  = new Universidad (provincia = corrientes,  honorarios = 4200, donaciones = 0)
+    const hurlingham = new Universidad (provincia = buenosAires, honorarios = 8800, donaciones = 0)
 
     //Profecionales disponibles
     const juana   = new ProfesionalesVinculados(universidad = rosario)
@@ -57,34 +58,12 @@ describe "group of test for Etapa 1 - Profesionales y empresas" {
     test "Lucia trabaja en mas provincias y la empresa ya no es de gente acotada" {
         luciana.puedeTrabajarEn(corrientes)
         luciana.puedeTrabajarEn(misiones)
-
         assert.notThat(mercadoLibre.esGenteAcotada())
     }
-}
 
 
-describe "group of test for Etapa 2 - Solicitantes" {
 
-    //Universidades disponibles
-    const sanMartin  = new Universidad(provincia = buenosAires, honorarios = 3500)
-    const rosario    = new Universidad(provincia = santaFe, honorarios = 2800)
-    const corriente  = new Universidad(provincia = corrientes, honorarios = 4200)
-    const hurlingham = new Universidad(provincia = buenosAires, honorarios = 8800)
-
-    //Profecionales disponibles
-    const melina  = new ProfesionalesAsociados (universidad = corriente)
-    const rocio   = new ProfesionalesLibres    (universidad = hurlingham, trabajoEnProvincias = #{santaFe, cordoba, buenosAires}, honorarios = 5000)
-    const luciana = new ProfesionalesLibres    (universidad = rosario, trabajoEnProvincias = #{santaFe, entreRios}, honorarios = 3200)
-
-    //Empresa disponible
-    const mercadoLibre = new Empresa(empleados = #{}, honorarios = 3500)
-
-    //Empresa que contrata profesionales
-    method initialize(){
-        mercadoLibre.contratarEmpleado(melina)
-        mercadoLibre.contratarEmpleado(rocio)
-        mercadoLibre.contratarEmpleado(luciana)
-    }
+    //Etapa 2 - Solicitantes
 
     //Personas disponibles
     const adele = new Persona (provincia = buenosAires)
@@ -110,7 +89,36 @@ describe "group of test for Etapa 2 - Solicitantes" {
     test "La empresa puede satisfacer a un solicitante" {
       assert.that(mercadoLibre.puedeSatisfacerA(adele))
     }
+
+
+
+    //Etapa 3 - Cobros
+
+    test "Un profesional vinculado cobra un importe y dona la mitad a la universidad" {
+        juana.cobrar(10000)
+        assert.equals(5000, rosario.totalDonaciones())
+    }
+
+    test "Un profesional asociado cobra un importe y lo dona a la asociacion de profesionales del litoral" {
+        melina.cobrar(12000)
+        assert.equals(12000, asociacionDelLitoral.totalDonaciones())
+    }
+
+    test "Un profesional libre cobra un importe y lo guarda" {
+        rocio.cobrar(11000)
+        assert.equals(11000, rocio.totalRecaudado())
+    }
+
+    test "Un profesional libre le da dinero a otro profesional libre y este lo recibe" {
+        rocio.cobrar(15500)
+        rocio.pasarDinero(luciana, 5500)
+
+        assert.equals(5500, luciana.totalRecaudado())
+        assert.equals(10000, rocio.totalRecaudado())
+    }
 }
+
+
 
 
 /*
