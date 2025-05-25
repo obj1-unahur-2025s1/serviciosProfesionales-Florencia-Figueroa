@@ -10,6 +10,7 @@ class Universidad {
     method totalDonaciones() = donaciones
 }
 
+// Etapa 3 - Cobros
 object asociacionDelLitoral {
     var donaciones = 0
     method recibirDonaciones(unImporte){donaciones += unImporte}

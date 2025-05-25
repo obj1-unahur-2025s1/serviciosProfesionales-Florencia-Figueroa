@@ -116,6 +116,22 @@ describe "group of test for Servivios profesionales" {
         assert.equals(5500, luciana.totalRecaudado())
         assert.equals(10000, rocio.totalRecaudado())
     }
+
+
+
+    //Etapa 4 - Registro de trabajos hechos
+
+    test "La empresa le brinda servicio a un solicitante y este se vuelve su cliente" {
+        mercadoLibre.darServivcio(bocaJuniors)
+        assert.that(mercadoLibre.esCliente(bocaJuniors))
+    }
+
+    test "Despues de atender a varios solicitantes la empresa tiene a 3 clientes" {
+        mercadoLibre.darServivcio(bocaJuniors)
+        mercadoLibre.darServivcio(adele)
+        mercadoLibre.darServivcio(comunidad)
+        assert.equals(3, mercadoLibre.cantidadDeClientes())
+    }
 }
 
 
