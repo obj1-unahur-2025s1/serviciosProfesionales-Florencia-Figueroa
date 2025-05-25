@@ -39,7 +39,21 @@ class Empresa{
             clientes.add(unSolicitante)
         }
     }
-
     method cantidadDeClientes() = clientes.size()
+
     method esCliente(unSolicitante) = clientes.contains(unSolicitante)
+
+    //Desafio final - Profesional poco atractivo
+
+    method esPocoAtractivo(unProfesional){ 
+        //Guardo en una const las provincias del profesional para compararlas
+        const provinciasProfesional = unProfesional.trabajoEnProvincias()
+
+        //Busco un profesional dentro de los empleados de la empresa que trabaje en 
+        //las mismas provincias que el profesional guardado y lo guardo tambien.
+        const otroProfesional = empleados.find({e => e.trabajoEnProvincias() == provinciasProfesional})
+        
+        //Retorno si el otro profesional cobra mas barato que el primero
+        return otroProfesional.honorarios() < unProfesional.honorarios()
+    }
 }
