@@ -133,9 +133,11 @@ describe "group of test for Servivios profesionales" {
         assert.equals(3, mercadoLibre.cantidadDeClientes())
     }
 
+
+
     //Desafio final - Profesional poco atractivo
 
-    test "La empresa considera que rocio no es unq empleada poco atractiva" {
+    test "La empresa considera que rocio no es una empleada poco atractiva" {
       assert.notThat(mercadoLibre.esPocoAtractivo(rocio))
     }
 }

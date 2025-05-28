@@ -5,8 +5,9 @@ import universidades_y_provincias.*
 //Profecionales:
 class ProfesionalesVinculados {
     //Le agrego property para luego por consultarlo / modificarlo
-    const property universidad      
+    const  universidad      
 
+    method universidad() = universidad
     //Puedo ponerle los () por que anteriormente use un property
     method honorarios() = universidad.honorarios() 
     //Puedo meter un objeto de esta forma en un conjunto
@@ -20,8 +21,9 @@ class ProfesionalesVinculados {
 }
 
 class ProfesionalesAsociados {
-    const property universidad
+    const  universidad
 
+    method universidad() = universidad
     method honorarios() = 3000
     method trabajoEnProvincias() = #{entreRios, santaFe, corrientes}
     method cobrar(unImporte){
@@ -29,11 +31,12 @@ class ProfesionalesAsociados {
 }
 
 class ProfesionalesLibres {
-    const property universidad
+    const  universidad
     const property trabajoEnProvincias = #{}
     const property honorarios
     var totalRecaudado = 0
 
+    method universidad() = universidad
     method puedeTrabajarEn(unaProvincia){
         trabajoEnProvincias.add(unaProvincia)
     }
